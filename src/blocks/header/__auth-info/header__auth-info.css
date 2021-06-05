@@ -1,0 +1,8 @@
+.header__auth-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 0;
+    padding: 0;
+}

@@ -1,0 +1,19 @@
+.register__text {
+    color: #fff;
+    text-align: left;
+    box-sizing: border-box;
+    border-bottom: 2px solid rgba(204,204,204,1);
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    background-color: black;
+    padding: 30px 0 13px 0;
+}
+
+.register_text::placeholder {
+    color: #CCC;
+}

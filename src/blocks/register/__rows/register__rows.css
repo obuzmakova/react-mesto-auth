@@ -1,0 +1,7 @@
+.register__rows {
+    margin: 50px auto 216px auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}

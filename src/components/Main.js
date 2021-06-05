@@ -6,7 +6,7 @@ function Main(props) {
     const currentUser = React.useContext(CurrentUserContext);
 
     return (
-        <div>
+        <div className="content">
             <section className="profile">
                 <div className="profile__avatar">
                     <img className="profile__image" src={currentUser.avatar} alt="Жак-Ив Кусто"/>
