@@ -1,0 +1,9 @@
+.popup__title_type_question {
+    margin: 34px auto 38px 36px;
+}
+
+@media screen and (max-width: 560px) {
+    .popup__title_type_question {
+        margin-left: 22px;
+    }
+}

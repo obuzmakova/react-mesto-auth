@@ -1,0 +1,12 @@
+.popup__container_type_question {
+    width: 430px;
+    height: 181px;
+    background: #FFFFFF;
+    border-radius: 10px;
+}
+
+@media screen and (max-width: 560px) {
+    .popup__container_type_question {
+        width: 282px;
+    }
+}
