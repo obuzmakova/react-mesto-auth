@@ -130,26 +130,24 @@ function App() {
     }
 
     function handleResponse(data) {
-        debugger;
         const {jwt, user} = data;
         const {email} = user;
 
         handleSuccess();
         localStorage.setItem('jwt', jwt);
-        debugger;
         setUserData({email});
         setLoggedIn(true);
     }
 
-    function handleRegister({password, email}) {
-        auth.register(password, email)
+    function handleRegister({email, password}) {
+        auth.register(email, password)
             // .then(handleSuccess)
             .then(handleResponse)
             .catch(handleFail)
     }
 
-    function handleLogin({password, email}) {
-        auth.authorize(password, email)
+    function handleLogin({email, password}) {
+        auth.authorize(email, password)
             .then(handleResponse)
             .catch(handleFail)
     }
@@ -208,7 +206,7 @@ function App() {
                         <Switch>
                             <Route path="/sign-up">
                                 <Header direction="/sign-in" text="Войти"/>
-                                <Register handleRegister={handleRegister} handleFail={handleFail} handleSuccess={handleSuccess}/>
+                                <Register handleRegister={handleRegister}/>
                             </Route>
 
                             <Route path="/sign-in">

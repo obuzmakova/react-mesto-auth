@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import * as auth from '../auth.js';
 
-function Register(props) {
+function Register({handleRegister}) {
     const [data, setData] = useState({
         email: '',
         password: ''
@@ -21,7 +21,7 @@ function Register(props) {
         e.preventDefault();
 
         let {email, password} = data;
-        props.handleRegister({email, password});
+        handleRegister({email, password});
         //     auth.register(this.state.username, this.state.password, this.state.email, this.state.calGoal).then((res) => {
         //         if(res.statusCode !== 400){
         //             this.props.history.push('/login');
