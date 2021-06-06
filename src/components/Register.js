@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
-import * as auth from '../auth.js';
 
 function Register({handleRegister}) {
     const [data, setData] = useState({
@@ -22,11 +21,6 @@ function Register({handleRegister}) {
 
         let {email, password} = data;
         handleRegister({email, password});
-        //     auth.register(this.state.username, this.state.password, this.state.email, this.state.calGoal).then((res) => {
-        //         if(res.statusCode !== 400){
-        //             this.props.history.push('/login');
-        //         }
-        //     })
     }
 
     return (
@@ -36,10 +30,8 @@ function Register({handleRegister}) {
             </p>
             <form onSubmit={handleSubmit}>
                 <div className="register__rows">
-                    <label htmlFor="email"/>
                     <input id="email" name="email" type="email" placeholder="Email" className="register__text"
                            value={data.email} onChange={handleChange} />
-                    <label htmlFor="password"/>
                     <input id="password" name="password" placeholder="Пароль" type="password" className="register__text"
                            value={data.password} onChange={handleChange} />
                 </div>

@@ -7,7 +7,7 @@ function PopupWithForm({title, name, submitBtn, isOpen, onClose, children, onSub
                 <button type="button" className="popup__close-button" onClick={onClose}/>
                 <h3 className="popup__title">{title}</h3>
                 <div>{children}</div>
-                <button type="submit" className="popup__submit-btn">{submitBtn}</button>
+                {(name !== "tooltip") ? <button type="submit" className="popup__submit-btn">{submitBtn}</button> : null}
             </form>
         </div>
     )

@@ -12,7 +12,6 @@ import InfoTooltip from './InfoTooltip';
 import Login from "./Login";
 import api from '../utils/api';
 import {Redirect, Route, Switch, useHistory} from 'react-router-dom';
-import {CardsContext} from "../contexts/CardsContext";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 import Footer from "./Footer";
 import * as auth from '../auth';
@@ -32,13 +31,13 @@ function App() {
     const [userData, setUserData] = useState({ email: ''});
     const history = useHistory();
 
-    React.useEffect(() => {
+    useEffect(() => {
         checkToken();
     }, []);
 
-    React.useEffect(() => {
+   useEffect(() => {
         if (loggedIn) {
-            history.push('/')
+            history.push("/cards")
         }
     }, [loggedIn]);
 
@@ -129,26 +128,23 @@ function App() {
             });
     }
 
-    function handleResponse(data) {
-        const {jwt, user} = data;
-        const {email} = user;
-
-        handleSuccess();
-        localStorage.setItem('jwt', jwt);
-        setUserData({email});
-        setLoggedIn(true);
-    }
-
     function handleRegister({email, password}) {
         auth.register(email, password)
-            // .then(handleSuccess)
-            .then(handleResponse)
+            .then((data) => {
+                handleSuccess();
+                history.push("/sign-in");
+            })
             .catch(handleFail)
     }
 
     function handleLogin({email, password}) {
         auth.authorize(email, password)
-            .then(handleResponse)
+            .then((data) => {
+                setUserData({email: email});
+                setLoggedIn(true);
+                history.push("/cards");
+                localStorage.setItem('jwt', data.token);
+            })
             .catch(handleFail)
     }
 
@@ -158,14 +154,13 @@ function App() {
 
     function handleSuccess() {
         setSuccessTooltipOpen(true);
-
     }
 
     function handleLogout() {
         setUserData({
             email: '',
         });
-        setLoggedIn(null);
+        setLoggedIn(false);
         localStorage.removeItem('jwt');
     }
 
@@ -175,8 +170,11 @@ function App() {
         if (jwt) {
             auth.checkToken(jwt)
                 .then(data => {
-                    setUserData(data);
+                    setUserData({
+                        email: data.data.email,
+                    });
                     setLoggedIn(true);
+                    history.push("/cards");
                 })
                 .catch(handleFail)
         } else {
@@ -185,25 +183,39 @@ function App() {
     }
 
     useEffect(() => {
-        Promise.all([api.getUserInfo(), api.getInitialCards()])
-            .then(([info, cards]) => {
-                setCurrentUser(info);
-                setCards(cards);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }, [])
+        if (loggedIn) {
+            Promise.all([api.getUserInfo(), api.getInitialCards()])
+                .then(([info, cards]) => {
+                    setCurrentUser(info);
+                    setCards(cards);
+                    // history.push("/cards");
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+    }, [loggedIn]);
+
     return (
         <CurrentUserContext.Provider value={currentUser}>
-            <CardsContext.Provider value={cards}>
                 <div className="page">
                     {loggedIn && <Header direction="/sign-up"
                                          text="Выйти"
                                          handleLogout={handleLogout}
-                                         userData={userData}
-                                         loggedIn={loggedIn}/>}
+                                         userData={userData}/>}
                         <Switch>
+                            <ProtectedRoute
+                                path="/cards"
+                                loggedIn={loggedIn}
+                                component={Main}
+                                cards={cards}
+                                onCardClick={handleCardClick}
+                                onEditAvatar={handleAvatarPopupOpen}
+                                onEditProfile={handleProfilePopupOpen}
+                                onAddPlace={handlePlacePopupOpen}
+                                onCardLike={handleCardLike}
+                                onCardDelete={handleCardDelete}
+                            />
                             <Route path="/sign-up">
                                 <Header direction="/sign-in" text="Войти"/>
                                 <Register handleRegister={handleRegister}/>
@@ -215,23 +227,8 @@ function App() {
                             </Route>
 
                             <Route>
-                                {/*<Header direction="/sign-in" text="Выйти"/>*/}
-                                {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
+                                {loggedIn ? <Redirect to="/cards" /> : <Redirect to="/sign-in" />}
                             </Route>
-
-                            <ProtectedRoute
-                                path="/"
-                                loggedIn={loggedIn}
-                                userData={userData}
-                                component={Main}
-                                cards={cards}
-                                onCardClick={handleCardClick}
-                                onEditAvatar={handleAvatarPopupOpen}
-                                onEditProfile={handleProfilePopupOpen}
-                                onAddPlace={handlePlacePopupOpen}
-                                onCardLike={handleCardLike}
-                                onCardDelete={handleCardDelete}
-                            />
                         </Switch>
 
                         <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar}/>
@@ -246,7 +243,6 @@ function App() {
 
                         <Footer />
                 </div>
-            </CardsContext.Provider>
         </CurrentUserContext.Provider>
   );
 }

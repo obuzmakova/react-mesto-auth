@@ -1,15 +1,17 @@
 export const BASE_URL = 'https://auth.nomoreparties.co';
 
 const checkResponse = (response) => {
-    debugger;
-    response.ok ? response.json() : Promise.reject(`Ошибка: ${response.status}`)
+    if (response.ok)
+        return response.json();
+    else
+        Promise.reject(`Ошибка: ${response.status}`);
 }
 
 export const register = (email, password) => {
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json"
         },
         body: JSON.stringify({password, email})
     })

@@ -1,6 +1,4 @@
 import React, {useState} from 'react';
-import { Link } from 'react-router-dom';
-import * as auth from '../auth.js';
 
 function Login(props) {
     const [data, setData] = useState({
@@ -24,18 +22,7 @@ function Login(props) {
             return ;
         }
         let {email, password} = data;
-        console.log(email, password);
         props.handleLogin({email, password});
-        // auth.authorize(data.email, data.password)
-        //     .then((data) => {
-        //         if (data.jwt){
-        //             setData({email: '', password: ''} ,() => {
-        //                 props.handleLogin();
-        //                 props.history.push('/');
-        //             })
-        //         }
-        //     })
-        //     .catch(err => console.log(err));
     }
 
     return (
