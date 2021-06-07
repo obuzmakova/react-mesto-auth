@@ -14,7 +14,7 @@ import api from '../utils/api';
 import {Redirect, Route, Switch, useHistory} from 'react-router-dom';
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 import Footer from "./Footer";
-import * as auth from '../auth';
+import * as auth from '../utils/auth';
 import successLogo from '../images/success-logo.svg';
 import failLogo from '../images/fail-logo.svg';
 
@@ -23,9 +23,11 @@ function App() {
     const [isEditProfilePopupOpen, setProfilePopupOpen] = useState(false);
     const [isAddPlacePopupOpen, setPlacePopupOpen] = useState(false);
     const [isEditAvatarPopupOpen, setAvatarPopupOpen] = useState(false);
-    const [isFailTooltipOpen, setFailTooltipOpen] = useState(false);
-    const [isSuccessTooltipOpen, setSuccessTooltipOpen] = useState(false);
+    const [isTooltipOpen, setTooltipOpen] = useState(false);
+    const [statusLogo, setStatusLogo] = useState(null);
+    const [statusText, setStatusText] = useState(null);
     const [selectedCard, setSelect] = useState(null);
+    const [statusLogoAlt, setStatusLogoAlt] = useState(null);
     const [currentUser, setCurrentUser] = useState({});
     const [loggedIn, setLoggedIn] = useState(false);
     const [userData, setUserData] = useState({ email: ''});
@@ -45,8 +47,10 @@ function App() {
         setAvatarPopupOpen(false);
         setProfilePopupOpen(false);
         setPlacePopupOpen(false);
-        setFailTooltipOpen(false);
-        setSuccessTooltipOpen(false);
+        setTooltipOpen(false);
+        setStatusLogo(null);
+        setStatusText(null);
+        setStatusLogoAlt(null);
         setSelect(null);
     }
 
@@ -149,11 +153,17 @@ function App() {
     }
 
     function handleFail() {
-        setFailTooltipOpen(true);
+        setStatusLogo(failLogo);
+        setStatusText("Что-то пошло не так! Попробуйте ещё раз.");
+        setStatusLogoAlt("Красный крест об ошибке");
+        setTooltipOpen(true);
     }
 
     function handleSuccess() {
-        setSuccessTooltipOpen(true);
+        setStatusLogo(successLogo);
+        setStatusText("Вы успешно зарегистрировались!");
+        setStatusLogoAlt("Галочка, подтверждающая успешную регистрацию");
+        setTooltipOpen(true);
     }
 
     function handleLogout() {
@@ -188,7 +198,6 @@ function App() {
                 .then(([info, cards]) => {
                     setCurrentUser(info);
                     setCards(cards);
-                    // history.push("/cards");
                 })
                 .catch((err) => {
                     console.log(err);
@@ -236,10 +245,8 @@ function App() {
                         <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddCard={handleAddPlaceSubmit}/>
                         <PopupWithForm title="Вы уверены?" name="question" submitBtn="Да" onClose={closeAllPopups}> </PopupWithForm>
                         <ImagePopup image={selectedCard} onClose={closeAllPopups}/>
-                        <InfoTooltip isOpen={isFailTooltipOpen} onClose={closeAllPopups} image={failLogo}
-                                     text="Что-то пошло не так! Попробуйте ещё раз." alt="Красный крест об ошибке"/>
-                        <InfoTooltip isOpen={isSuccessTooltipOpen} onClose={closeAllPopups} image={successLogo}
-                                     text="Вы успешно зарегистрировались!" alt="Галочка, подтверждающая успешную регистрацию"/>
+                        <InfoTooltip isOpen={isTooltipOpen} onClose={closeAllPopups} statusLogo={statusLogo}
+                                     statusText={statusText} statusLogoAlt={statusLogoAlt}/>
 
                         <Footer />
                 </div>
