@@ -19,7 +19,7 @@ function Register({handleRegister}) {
     function handleSubmit(e) {
         e.preventDefault();
 
-        let {email, password} = data;
+        const {email, password} = data;
         handleRegister({email, password});
     }
 
@@ -35,7 +35,7 @@ function Register({handleRegister}) {
                     <input id="password" name="password" placeholder="Пароль" type="password" className="register__text"
                            value={data.password} onChange={handleChange} />
                 </div>
-                <button type="submit" onSubmit={handleSubmit} className="register__button">Зарегистрироваться</button>
+                <button type="submit" className="register__button">Зарегистрироваться</button>
             </form>
 
             <div className="register__signin">

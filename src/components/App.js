@@ -135,8 +135,13 @@ function App() {
     function handleRegister({email, password}) {
         auth.register(email, password)
             .then((data) => {
-                handleSuccess();
-                history.push("/sign-in");
+                if (data) {
+                    handleSuccess();
+                    history.push("/sign-in");
+                }
+                else {
+                    handleFail();
+                }
             })
             .catch(handleFail)
     }

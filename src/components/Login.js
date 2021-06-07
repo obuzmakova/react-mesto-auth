@@ -21,7 +21,7 @@ function Login(props) {
         if (!data.email || !data.password) {
             return ;
         }
-        let {email, password} = data;
+        const {email, password} = data;
         props.handleLogin({email, password});
     }
 
@@ -39,7 +39,7 @@ function Login(props) {
                     <input id="password" name="password" placeholder="Пароль" type="password" className="register__text"
                            value={data.password} onChange={handleChange} />
                 </div>
-                <button type="submit" onSubmit={handleSubmit} className="register__button-signin">Войти</button>
+                <button type="submit" className="register__button register__button-signin">Войти</button>
             </form>
         </div>
     )
